@@ -24,4 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "FNCH_NetLibrary"
 include(":app")
- 
+include(":NetLib")
