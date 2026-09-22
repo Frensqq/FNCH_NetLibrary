@@ -1,5 +1,9 @@
 package com.example.netlib.domain.model.CandidateStatuses
 
+import kotlinx.serialization.Serializable
+
+@Serializable
+
 data class CandidateStatusesListResponse(
     val page:Int,
     val perPage:Int,

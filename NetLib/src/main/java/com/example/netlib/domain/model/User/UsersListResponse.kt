@@ -1,5 +1,9 @@
 package com.example.netlib.domain.model.User
 
+import kotlinx.serialization.Serializable
+
+@Serializable
+
 data class UsersListResponse(
     val page:Int,
     val perPage:Int,

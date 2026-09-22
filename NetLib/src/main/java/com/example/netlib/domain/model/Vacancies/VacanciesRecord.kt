@@ -1,5 +1,9 @@
 package com.example.netlib.domain.model.Vacancies
 
+import kotlinx.serialization.Serializable
+
+@Serializable
+
 data class VacanciesRecord(
     val collectionId: String,
     val collectionName: String,

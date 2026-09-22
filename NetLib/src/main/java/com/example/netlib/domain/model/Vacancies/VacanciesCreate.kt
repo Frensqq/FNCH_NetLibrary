@@ -1,5 +1,9 @@
 package com.example.netlib.domain.model.Vacancies
 
+import kotlinx.serialization.Serializable
+
+@Serializable
+
 data class VacanciesCreate(
     val title: String,
     val description: String,

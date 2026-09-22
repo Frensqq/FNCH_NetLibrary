@@ -1,5 +1,9 @@
 package com.example.netlib.domain.model.User
 
+import kotlinx.serialization.Serializable
+
+@Serializable
+
 data class UsersCreate(
     val email: String,
     val emailVisibility: String,

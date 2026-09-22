@@ -1,5 +1,8 @@
 package com.example.netlib.domain.model.Applicants
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ApplicantsRecord(
     val collectionId: String,
     val collectionName: String,

@@ -1,5 +1,9 @@
 package com.example.netlib.domain.model.Vacancies
 
+import kotlinx.serialization.Serializable
+
+@Serializable
+
 data class VacanciesUpdate(
     val title: String,
     val description: String,
@@ -10,7 +14,7 @@ data class VacanciesUpdate(
     val position: String,
     val city: String,
     val status: String,
-    val salaryFrom: Number,
-    val salaryTo: Number,
+    val salaryFrom: Int,
+    val salaryTo: Int,
     val author: String,
 )

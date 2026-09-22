@@ -1,5 +1,9 @@
 package com.example.netlib.domain.model.Cities
 
+import kotlinx.serialization.Serializable
+
+@Serializable
+
 data class CitiesListResponse(
     val page:Int,
     val perPage:Int,

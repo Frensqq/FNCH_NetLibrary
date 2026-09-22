@@ -1,6 +1,9 @@
 package com.example.netlib.domain.model.User
 
 import androidx.transition.Visibility
+import kotlinx.serialization.Serializable
+
+@Serializable
 
 data class UsersRecord(
     val collectionId: String,
