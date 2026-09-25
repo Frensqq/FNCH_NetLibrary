@@ -1,4 +1,4 @@
-package com.example.netlib.data
+package com.example.netlib.data.remote
 
 import com.example.netlib.domain.model.ApplicantStatuses.ApplicantStatusesCreate
 import com.example.netlib.domain.model.ApplicantStatuses.ApplicantStatusesRecord
@@ -9,7 +9,6 @@ import com.example.netlib.domain.model.Applicants.ApplicantsListResponse
 import com.example.netlib.domain.model.Applicants.ApplicantsRecord
 import com.example.netlib.domain.model.Applicants.ApplicantsUpdate
 import com.example.netlib.domain.model.Auth.AuthWithPasswordRequest
-import com.example.netlib.domain.model.Auth.EmailRequest
 import com.example.netlib.domain.model.Auth.UserAuthResponse
 import com.example.netlib.domain.model.CandidateCards.CandidateCardsCreate
 import com.example.netlib.domain.model.CandidateCards.CandidateCardsListResponse
@@ -31,10 +30,6 @@ import com.example.netlib.domain.model.Department.DepartmentsCreate
 import com.example.netlib.domain.model.Department.DepartmentsListResponse
 import com.example.netlib.domain.model.Department.DepartmentsRecord
 import com.example.netlib.domain.model.Department.DepartmentsUpdate
-import com.example.netlib.domain.model.Position.PositionsCreate
-import com.example.netlib.domain.model.Position.PositionsListResponse
-import com.example.netlib.domain.model.Position.PositionsRecord
-import com.example.netlib.domain.model.Position.PositionsUpdate
 import com.example.netlib.domain.model.User.UsersCreate
 import com.example.netlib.domain.model.User.UsersListResponse
 import com.example.netlib.domain.model.User.UsersRecord
@@ -260,6 +255,5 @@ class PBApi(
     //auth
     private suspend fun authPassword(data: AuthWithPasswordRequest): UserAuthResponse =
         post("collections/users/records", data)
-
 
 }
