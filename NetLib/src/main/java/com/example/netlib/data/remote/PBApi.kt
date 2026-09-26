@@ -50,7 +50,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
 class PBApi(
-    private val client: HttpClient,
+     val client: HttpClient,
 ) {
 
     private suspend inline fun <reified T> get(
@@ -78,182 +78,182 @@ class PBApi(
 
 
     //department
-    private suspend fun getDepartments(filter: String?): DepartmentsListResponse =
+     suspend fun getDepartments(filter: String?): DepartmentsListResponse =
         get("collections/departments/records", filter)
 
-    private suspend fun postDepartments(data: DepartmentsCreate): DepartmentsRecord =
+     suspend fun postDepartments(data: DepartmentsCreate): DepartmentsRecord =
         post("collections/departments/records", data)
 
-    private suspend fun getDepartment(id: String): DepartmentsRecord =
+     suspend fun getDepartment(id: String): DepartmentsRecord =
         get("collections/departments/records/$id")
 
 
-    private suspend fun patchDepartments(id: String, data: DepartmentsUpdate): DepartmentsRecord =
+     suspend fun patchDepartments(id: String, data: DepartmentsUpdate): DepartmentsRecord =
         patch("collections/departments/records/$id", data)
 
-    private suspend fun deleteDepartments(id: String) {
+     suspend fun deleteDepartments(id: String) {
         client.delete("collections/departments/records/$id")
     }
 
     //cities
 
-    private suspend fun getCities(filter: String?): CitiesListResponse =
+     suspend fun getCities(filter: String?): CitiesListResponse =
         get("collections/cities/records", filter)
 
-    private suspend fun postCities(data: CitiesCreate): CitiesRecord =
+     suspend fun postCities(data: CitiesCreate): CitiesRecord =
         post("collections/cities/records", data)
 
-    private suspend fun getCity(id: String): CitiesRecord =
+     suspend fun getCity(id: String): CitiesRecord =
         get("collections/cities/records/$id")
 
-    private suspend fun patchCities(id: String, data: CitiesUpdate): CitiesRecord =
+     suspend fun patchCities(id: String, data: CitiesUpdate): CitiesRecord =
         patch("collections/cities/records/$id", data)
 
-    private suspend fun deleteCities(id: String) {
+     suspend fun deleteCities(id: String) {
         client.delete("collections/cities/records/$id")
     }
 
     //applicant_statuses
 
-    private suspend fun getAppsStatus(filter: String?): ApplicantsStatusesListResponse =
+    suspend fun getAppsStatus(filter: String?): ApplicantsStatusesListResponse =
         get("collections/applicant_statuses/records", filter)
 
-    private suspend fun postAppStatus(data: ApplicantStatusesCreate): ApplicantStatusesRecord =
+     suspend fun postAppStatus(data: ApplicantStatusesCreate): ApplicantStatusesRecord =
         post("collections/applicant_statuses/records", data)
 
-    private suspend fun getAppStatus(id: String): ApplicantStatusesRecord =
+     suspend fun getAppStatus(id: String): ApplicantStatusesRecord =
         get("collections/applicant_statuses/records/$id")
 
-    private suspend fun patchAppStatus(
+     suspend fun patchAppStatus(
         id: String,
         data: ApplicantStatusesUpdate
     ): ApplicantStatusesRecord =
         patch("collections/applicant_statuses/records/$id", data)
 
-    private suspend fun deleteAppStatus(id: String) {
+     suspend fun deleteAppStatus(id: String) {
         client.delete("collections/applicant_statuses/records/$id")
     }
 
 
     //candidate_statuses
 
-    private suspend fun getCandidatesStatus(filter: String?): CandidateStatusesListResponse =
+     suspend fun getCandidatesStatus(filter: String?): CandidateStatusesListResponse =
         get("collections/candidate_statuses/records", filter)
 
-    private suspend fun postCandidateStatus(data: CandidateStatusesCreate): CandidateStatusesRecord =
+     suspend fun postCandidateStatus(data: CandidateStatusesCreate): CandidateStatusesRecord =
         post("collections/candidate_statuses/records", data)
 
-    private suspend fun getCandidateStatus(id: String): CandidateStatusesRecord =
+     suspend fun getCandidateStatus(id: String): CandidateStatusesRecord =
         get("collections/candidate_statuses/records/$id")
 
-    private suspend fun patchCandidateStatus(
+     suspend fun patchCandidateStatus(
         id: String,
         data: CandidateStatusesUpdate
     ): CandidateStatusesRecord =
         patch("collections/candidate_statuses/records/$id", data)
 
-    private suspend fun deleteCandidateStatus(id: String) {
+     suspend fun deleteCandidateStatus(id: String) {
         client.delete("collections/candidate_statuses/records/$id")
     }
 
     //vacancies
 
-    private suspend fun getVacancies(filter: String?): VacanciesListResponse =
+     suspend fun getVacancies(filter: String?): VacanciesListResponse =
         get("collections/vacancies/records", filter)
 
-    private suspend fun postVacancies(data: VacanciesCreate): VacanciesRecord =
+     suspend fun postVacancies(data: VacanciesCreate): VacanciesRecord =
         post("collections/vacancies/records", data)
 
-    private suspend fun getVacancy(id: String): VacanciesRecord =
+     suspend fun getVacancy(id: String): VacanciesRecord =
         get("collections/vacancies/records/$id")
 
-    private suspend fun patchVacancies(id: String, data: VacanciesUpdate): VacanciesRecord =
+     suspend fun patchVacancies(id: String, data: VacanciesUpdate): VacanciesRecord =
         patch("collections/vacancies/records/$id", data)
 
-    private suspend fun deleteVacancies(id: String) {
+     suspend fun deleteVacancies(id: String) {
         client.delete("collections/vacancies/records/$id")
     }
 
     //applicants
 
-    private suspend fun getApplicants(filter: String?): ApplicantsListResponse =
+     suspend fun getApplicants(filter: String?): ApplicantsListResponse =
         get("collections/applicants/records", filter)
 
-    private suspend fun postApplicants(data: ApplicantsCreate): ApplicantsRecord =
+     suspend fun postApplicants(data: ApplicantsCreate): ApplicantsRecord =
         post("collections/applicants/records", data)
 
-    private suspend fun getApplicant(id: String): ApplicantsRecord =
+     suspend fun getApplicant(id: String): ApplicantsRecord =
         get("collections/applicants/records/$id")
 
-    private suspend fun patchApplicants(id: String, data: ApplicantsUpdate): ApplicantsRecord =
+     suspend fun patchApplicants(id: String, data: ApplicantsUpdate): ApplicantsRecord =
         patch("collections/applicants/records/$id", data)
 
-    private suspend fun deleteApplicants(id: String) {
+     suspend fun deleteApplicants(id: String) {
         client.delete("collections/applicants/records/$id")
     }
 
     //candidate_cards
 
-    private suspend fun getCandidateCards(filter: String?): CandidateCardsListResponse =
+     suspend fun getCandidateCards(filter: String?): CandidateCardsListResponse =
         get("collections/candidate_cards/records", filter)
 
-    private suspend fun postCandidateCards(data: CandidateCardsCreate): CandidateCardsRecord =
+     suspend fun postCandidateCards(data: CandidateCardsCreate): CandidateCardsRecord =
         post("collections/candidate_cards/records", data)
 
-    private suspend fun getCandidateCard(id: String): CandidateCardsRecord =
+     suspend fun getCandidateCard(id: String): CandidateCardsRecord =
         get("collections/candidate_cards/records/$id")
 
-    private suspend fun patchCandidateCards(
+     suspend fun patchCandidateCards(
         id: String,
         data: CandidateCardsUpdate
     ): CandidateCardsRecord =
         patch("collections/candidate_cards/records/$id", data)
 
-    private suspend fun deleteCandidateCards(id: String) {
+     suspend fun deleteCandidateCards(id: String) {
         client.delete("collections/candidate_cards/records/$id")
     }
 
     //candidate_cards
 
-    private suspend fun getCandidateCardsCom(filter: String?): CandidateCardCommentsListResponse =
+     suspend fun getCandidateCardsCom(filter: String?): CandidateCardCommentsListResponse =
         get("collections/candidate_card_comments/records", filter)
 
-    private suspend fun postCandidateCardsCom(data: CandidateCardCommentsCreate): CandidateCardCommentsRecord =
+     suspend fun postCandidateCardsCom(data: CandidateCardCommentsCreate): CandidateCardCommentsRecord =
         post("collections/candidate_card_comments/records", data)
 
-    private suspend fun getCandidateCardCom(id: String): CandidateCardCommentsRecord =
+     suspend fun getCandidateCardCom(id: String): CandidateCardCommentsRecord =
         get("collections/candidate_card_comments/records/$id")
 
-    private suspend fun patchCandidateCardsCom(
+     suspend fun patchCandidateCardsCom(
         id: String,
         data: CandidateCardCommentsUpdate
     ): CandidateCardCommentsRecord =
         patch("collections/candidate_card_comments/records/$id", data)
 
-    private suspend fun deleteCandidateCardsCom(id: String) {
+     suspend fun deleteCandidateCardsCom(id: String) {
         client.delete("collections/candidate_card_comments/records/$id")
     }
 
     //user
 
-    private suspend fun getUsers(filter: String?): UsersListResponse =
+     suspend fun getUsers(filter: String?): UsersListResponse =
         get("collections/users/records", filter)
 
-    private suspend fun postUsers(data: UsersCreate): UsersRecord =
+     suspend fun postUsers(data: UsersCreate): UsersRecord =
         post("collections/users/records", data)
 
-    private suspend fun getUser(id: String): UsersRecord =
+     suspend fun getUser(id: String): UsersRecord =
         get("collections/users/records/$id")
 
-    private suspend fun patchUsers(id: String, data: UsersUpdate): UsersRecord =
+     suspend fun patchUsers(id: String, data: UsersUpdate): UsersRecord =
         patch("collections/users/records/$id", data)
 
-    private suspend fun deleteUsers(id: String) {
+     suspend fun deleteUsers(id: String) {
         client.delete("collections/users/records/$id")
     }
 
     //auth
-    private suspend fun authPassword(data: AuthWithPasswordRequest): UserAuthResponse =
+     suspend fun authPassword(data: AuthWithPasswordRequest): UserAuthResponse =
         post("collections/users/records", data)
 
 }
