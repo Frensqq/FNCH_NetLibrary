@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 
 data class UsersCreate(
     val email: String,
-    val emailVisibility: String,
-    val verified: String,
+    val emailVisibility: Boolean,
+    val verified: Boolean,
     val firstName: String,
     val lastName: String,
     val patronymic: String,

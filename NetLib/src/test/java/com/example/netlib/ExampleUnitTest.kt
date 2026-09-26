@@ -1,5 +1,12 @@
 package com.example.netlib
 
+import com.example.netlib.data.remote.PBApi
+import com.example.netlib.data.remote.PBApiService
+import com.example.netlib.data.repository.RepositoryImpl
+import com.example.netlib.domain.model.User.UsersCreate
+import io.ktor.client.HttpClient
+import kotlinx.coroutines.runBlocking
+import okhttp3.OkHttpClient
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -11,7 +18,26 @@ import org.junit.Assert.*
  */
 class ExampleUnitTest {
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun registrationUser() = runBlocking{
+
+        val api: PBApi = PBApiService.instance
+
+        val user = api.postUsers(
+            data =
+                UsersCreate(
+                    "test@mail.com",
+                    true,
+                    verified = false,
+                    firstName = "FirstTest",
+                    lastName = "FirstTest",
+                    patronymic = "FirstTest",
+                    phone = "+78887776655",
+                    department = " ",
+                    position = " ",
+                    role =" ",
+                    password = "12345678",
+                    confirmPassword = "12345678"
+                    )
+        )
     }
 }
