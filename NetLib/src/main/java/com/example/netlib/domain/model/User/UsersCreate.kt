@@ -16,5 +16,5 @@ data class UsersCreate(
     val position: String,
     val role: String,
     val password: String,
-    val confirmPassword: String
+    val passwordConfirm: String
 )

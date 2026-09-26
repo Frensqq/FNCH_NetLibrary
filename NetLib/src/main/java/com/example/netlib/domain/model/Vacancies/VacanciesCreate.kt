@@ -14,7 +14,7 @@ data class VacanciesCreate(
     val position: String,
     val city: String,
     val status: String,
-    val salaryFrom: Number,
-    val salaryTo: Number,
+    val salaryFrom: Int,
+    val salaryTo: Int,
     val author: String,
 )

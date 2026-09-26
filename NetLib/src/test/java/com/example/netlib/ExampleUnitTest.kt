@@ -3,10 +3,12 @@ package com.example.netlib
 import com.example.netlib.data.remote.PBApi
 import com.example.netlib.data.remote.PBApiService
 import com.example.netlib.data.repository.RepositoryImpl
+import com.example.netlib.domain.model.Department.DepartmentsListResponse
 import com.example.netlib.domain.model.User.UsersCreate
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
+import org.junit.Assert
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -17,10 +19,24 @@ import org.junit.Assert.*
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
+
+    val api: PBApi = PBApiService.instance
+
+
+
+    @Test
+    fun getDepartments() = runBlocking {
+        val departments = api.getDepartments(null)
+
+        Assert.assertEquals(5, departments.totalItems)
+        Assert.assertNotEquals(10, departments.totalItems)
+    }
+
+   
+
     @Test
     fun registrationUser() = runBlocking{
 
-        val api: PBApi = PBApiService.instance
 
         val user = api.postUsers(
             data =
@@ -34,9 +50,9 @@ class ExampleUnitTest {
                     phone = "+78887776655",
                     department = " ",
                     position = " ",
-                    role =" ",
+                    role ="admin",
                     password = "12345678",
-                    confirmPassword = "12345678"
+                    passwordConfirm = "12345678"
                     )
         )
     }
