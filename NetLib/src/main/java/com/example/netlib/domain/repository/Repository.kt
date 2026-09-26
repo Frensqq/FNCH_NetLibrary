@@ -19,6 +19,7 @@ import com.example.netlib.domain.model.CandidateStatuses.CandidateStatusesListRe
 import com.example.netlib.domain.model.Cities.CitiesListResponse
 import com.example.netlib.domain.model.Department.DepartmentsListResponse
 import com.example.netlib.domain.model.NetworkResult
+import com.example.netlib.domain.model.Position.PositionsListResponse
 import com.example.netlib.domain.model.User.UsersCreate
 import com.example.netlib.domain.model.User.UsersListResponse
 import com.example.netlib.domain.model.User.UsersRecord
@@ -44,6 +45,8 @@ interface Repository {
         //candidate_statuses
         suspend fun getCandidatesStatus(filter: String?): NetworkResult<CandidateStatusesListResponse>
 
+        //position
+        suspend fun getPositions(filter: String?): NetworkResult<PositionsListResponse>
 
         //vacancies
 

@@ -18,6 +18,7 @@ import com.example.netlib.domain.model.CandidateCartComments.CandidateCardCommen
 import com.example.netlib.domain.model.CandidateStatuses.CandidateStatusesListResponse
 import com.example.netlib.domain.model.Cities.CitiesListResponse
 import com.example.netlib.domain.model.Department.DepartmentsListResponse
+import com.example.netlib.domain.model.Position.PositionsListResponse
 import com.example.netlib.domain.model.User.UsersCreate
 import com.example.netlib.domain.model.User.UsersListResponse
 import com.example.netlib.domain.model.User.UsersRecord
@@ -84,6 +85,9 @@ class PBApi(
         get("collections/candidate_statuses/records", filter)
 
 
+    //position
+    suspend fun getPositions(filter: String?): PositionsListResponse =
+        get("collections/positions/records", filter)
 
 
     //vacancies
@@ -170,5 +174,5 @@ class PBApi(
 
     //auth
      suspend fun authPassword(data: AuthWithPasswordRequest): UserAuthResponse =
-        post("collections/users/records", data)
+        post("collections/users/auth-with-password", data)
 }

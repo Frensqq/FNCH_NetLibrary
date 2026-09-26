@@ -11,6 +11,7 @@ import com.example.netlib.domain.model.CandidateCards.CandidateCardsUpdate
 import com.example.netlib.domain.model.CandidateCartComments.CandidateCardCommentsCreate
 import com.example.netlib.domain.model.CandidateCartComments.CandidateCardCommentsUpdate
 import com.example.netlib.domain.model.NetworkResult
+import com.example.netlib.domain.model.Position.PositionsListResponse
 import com.example.netlib.domain.model.User.UsersCreate
 import com.example.netlib.domain.model.User.UsersUpdate
 import com.example.netlib.domain.model.Vacancies.VacanciesCreate
@@ -54,6 +55,10 @@ class RepositoryImpl(
                 )
             )
         }
+    }
+
+    override suspend fun getPositions(filter: String?): NetworkResult<PositionsListResponse> = safeApiCall {
+        api.getPositions(filter)
     }
 
     override suspend fun getDepartments(filter: String?) =
