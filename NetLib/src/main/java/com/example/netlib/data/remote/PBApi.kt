@@ -1,8 +1,5 @@
 package com.example.netlib.data.remote
 
-import com.example.netlib.domain.model.ApplicantStatuses.ApplicantStatusesCreate
-import com.example.netlib.domain.model.ApplicantStatuses.ApplicantStatusesRecord
-import com.example.netlib.domain.model.ApplicantStatuses.ApplicantStatusesUpdate
 import com.example.netlib.domain.model.ApplicantStatuses.ApplicantsStatusesListResponse
 import com.example.netlib.domain.model.Applicants.ApplicantsCreate
 import com.example.netlib.domain.model.Applicants.ApplicantsListResponse
@@ -18,18 +15,9 @@ import com.example.netlib.domain.model.CandidateCartComments.CandidateCardCommen
 import com.example.netlib.domain.model.CandidateCartComments.CandidateCardCommentsListResponse
 import com.example.netlib.domain.model.CandidateCartComments.CandidateCardCommentsRecord
 import com.example.netlib.domain.model.CandidateCartComments.CandidateCardCommentsUpdate
-import com.example.netlib.domain.model.CandidateStatuses.CandidateStatusesCreate
 import com.example.netlib.domain.model.CandidateStatuses.CandidateStatusesListResponse
-import com.example.netlib.domain.model.CandidateStatuses.CandidateStatusesRecord
-import com.example.netlib.domain.model.CandidateStatuses.CandidateStatusesUpdate
-import com.example.netlib.domain.model.Cities.CitiesCreate
 import com.example.netlib.domain.model.Cities.CitiesListResponse
-import com.example.netlib.domain.model.Cities.CitiesRecord
-import com.example.netlib.domain.model.Cities.CitiesUpdate
-import com.example.netlib.domain.model.Department.DepartmentsCreate
 import com.example.netlib.domain.model.Department.DepartmentsListResponse
-import com.example.netlib.domain.model.Department.DepartmentsRecord
-import com.example.netlib.domain.model.Department.DepartmentsUpdate
 import com.example.netlib.domain.model.User.UsersCreate
 import com.example.netlib.domain.model.User.UsersListResponse
 import com.example.netlib.domain.model.User.UsersRecord
@@ -81,80 +69,22 @@ class PBApi(
      suspend fun getDepartments(filter: String?): DepartmentsListResponse =
         get("collections/departments/records", filter)
 
-     suspend fun postDepartments(data: DepartmentsCreate): DepartmentsRecord =
-        post("collections/departments/records", data)
-
-     suspend fun getDepartment(id: String): DepartmentsRecord =
-        get("collections/departments/records/$id")
-
-
-     suspend fun patchDepartments(id: String, data: DepartmentsUpdate): DepartmentsRecord =
-        patch("collections/departments/records/$id", data)
-
-     suspend fun deleteDepartments(id: String) {
-        client.delete("collections/departments/records/$id")
-    }
-
     //cities
 
      suspend fun getCities(filter: String?): CitiesListResponse =
         get("collections/cities/records", filter)
 
-     suspend fun postCities(data: CitiesCreate): CitiesRecord =
-        post("collections/cities/records", data)
-
-     suspend fun getCity(id: String): CitiesRecord =
-        get("collections/cities/records/$id")
-
-     suspend fun patchCities(id: String, data: CitiesUpdate): CitiesRecord =
-        patch("collections/cities/records/$id", data)
-
-     suspend fun deleteCities(id: String) {
-        client.delete("collections/cities/records/$id")
-    }
 
     //applicant_statuses
-
     suspend fun getAppsStatus(filter: String?): ApplicantsStatusesListResponse =
         get("collections/applicant_statuses/records", filter)
 
-     suspend fun postAppStatus(data: ApplicantStatusesCreate): ApplicantStatusesRecord =
-        post("collections/applicant_statuses/records", data)
-
-     suspend fun getAppStatus(id: String): ApplicantStatusesRecord =
-        get("collections/applicant_statuses/records/$id")
-
-     suspend fun patchAppStatus(
-        id: String,
-        data: ApplicantStatusesUpdate
-    ): ApplicantStatusesRecord =
-        patch("collections/applicant_statuses/records/$id", data)
-
-     suspend fun deleteAppStatus(id: String) {
-        client.delete("collections/applicant_statuses/records/$id")
-    }
-
-
     //candidate_statuses
-
      suspend fun getCandidatesStatus(filter: String?): CandidateStatusesListResponse =
         get("collections/candidate_statuses/records", filter)
 
-     suspend fun postCandidateStatus(data: CandidateStatusesCreate): CandidateStatusesRecord =
-        post("collections/candidate_statuses/records", data)
 
-     suspend fun getCandidateStatus(id: String): CandidateStatusesRecord =
-        get("collections/candidate_statuses/records/$id")
 
-     suspend fun patchCandidateStatus(
-        id: String,
-        data: CandidateStatusesUpdate
-    ): CandidateStatusesRecord =
-        patch("collections/candidate_statuses/records/$id", data)
-
-     suspend fun deleteCandidateStatus(id: String) {
-        client.delete("collections/candidate_statuses/records/$id")
-    }
 
     //vacancies
 
@@ -188,9 +118,6 @@ class PBApi(
      suspend fun patchApplicants(id: String, data: ApplicantsUpdate): ApplicantsRecord =
         patch("collections/applicants/records/$id", data)
 
-     suspend fun deleteApplicants(id: String) {
-        client.delete("collections/applicants/records/$id")
-    }
 
     //candidate_cards
 
@@ -209,9 +136,6 @@ class PBApi(
     ): CandidateCardsRecord =
         patch("collections/candidate_cards/records/$id", data)
 
-     suspend fun deleteCandidateCards(id: String) {
-        client.delete("collections/candidate_cards/records/$id")
-    }
 
     //candidate_cards
 
@@ -230,10 +154,6 @@ class PBApi(
     ): CandidateCardCommentsRecord =
         patch("collections/candidate_card_comments/records/$id", data)
 
-     suspend fun deleteCandidateCardsCom(id: String) {
-        client.delete("collections/candidate_card_comments/records/$id")
-    }
-
     //user
 
      suspend fun getUsers(filter: String?): UsersListResponse =
@@ -248,12 +168,7 @@ class PBApi(
      suspend fun patchUsers(id: String, data: UsersUpdate): UsersRecord =
         patch("collections/users/records/$id", data)
 
-     suspend fun deleteUsers(id: String) {
-        client.delete("collections/users/records/$id")
-    }
-
     //auth
      suspend fun authPassword(data: AuthWithPasswordRequest): UserAuthResponse =
         post("collections/users/records", data)
-
 }
