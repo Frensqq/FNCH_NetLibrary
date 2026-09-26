@@ -25,7 +25,6 @@ import io.ktor.utils.io.errors.IOException
 class RepositoryImpl(
     private val api: PBApi,
     private val networkMonitor: NetworkMonitor,
-    private val context: Context,
     ): Repository {
 
     private suspend fun <T> safeApiCall(apiCall : suspend () ->T): NetworkResult<T>{

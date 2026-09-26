@@ -1,4 +1,4 @@
-package com.example.netlib.network
+package com.example.netlib.data.network
 
 import android.content.Context
 import android.net.ConnectivityManager
