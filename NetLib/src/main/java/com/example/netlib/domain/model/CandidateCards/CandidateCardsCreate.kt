@@ -9,6 +9,6 @@ data class CandidateCardsCreate(
     val applicant: String,
     val status: String,
     val hrResponsible: String,
-    val sort: String,
-    val isDeleted: String,
+    val sort: Int,
+    val isDeleted: Boolean,
 )

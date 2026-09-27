@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 
 data class CandidateCardCommentsCreate(
-    val name: String,
-    val department: String,
+    val card: String,
+    val text: String,
+    val author: String,
 )

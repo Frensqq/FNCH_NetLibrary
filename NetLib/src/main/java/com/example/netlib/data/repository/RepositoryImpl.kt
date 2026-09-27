@@ -12,6 +12,7 @@ import com.example.netlib.domain.model.CandidateCartComments.CandidateCardCommen
 import com.example.netlib.domain.model.CandidateCartComments.CandidateCardCommentsUpdate
 import com.example.netlib.domain.model.NetworkResult
 import com.example.netlib.domain.model.Position.PositionsListResponse
+import com.example.netlib.domain.model.UploadFile
 import com.example.netlib.domain.model.User.UsersCreate
 import com.example.netlib.domain.model.User.UsersUpdate
 import com.example.netlib.domain.model.Vacancies.VacanciesCreate
@@ -25,28 +26,25 @@ import io.ktor.utils.io.errors.IOException
 class RepositoryImpl(
     private val api: PBApi,
     private val networkMonitor: NetworkMonitor,
-    ): Repository {
+) : Repository {
 
-    private suspend fun <T> safeApiCall(apiCall : suspend () ->T): NetworkResult<T>{
-        if(!networkMonitor.isConnected()){
+    private suspend fun <T> safeApiCall(apiCall: suspend () -> T): NetworkResult<T> {
+        if (!networkMonitor.isConnected()) {
             return NetworkResult.NoInternet
         }
 
-        return try{
+        return try {
             NetworkResult.Success(apiCall())
-        }catch (e: IOException){
+        } catch (e: IOException) {
             NetworkResult.NoInternet
-        }catch (e: ResponseException){
+        } catch (e: ResponseException) {
             NetworkResult.Error(
                 errorResponse = ErrorResponse(
                     status = e.response.status.value,
                     message = e.message.toString(),
-                    data = mapOf("raw" to runCatching{
-                        e.response.body<String>()
-                    }.getOrDefault(""))
                 )
             )
-        }catch (e: Exception){
+        } catch (e: Exception) {
             NetworkResult.Error(
                 errorResponse = ErrorResponse(
                     status = -1,
@@ -56,86 +54,105 @@ class RepositoryImpl(
         }
     }
 
-    override suspend fun getPositions(filter: String?): NetworkResult<PositionsListResponse> = safeApiCall {
-        api.getPositions(filter)
-    }
+    override suspend fun getPositions(filter: String?): NetworkResult<PositionsListResponse> =
+        safeApiCall { api.getPositions(filter) }
 
     override suspend fun getDepartments(filter: String?) =
-      safeApiCall {api.getDepartments(filter)}
-
+        safeApiCall { api.getDepartments(filter) }
 
     override suspend fun getCities(filter: String?) =
-      safeApiCall {api.getCities(filter)}
+        safeApiCall { api.getCities(filter) }
 
     override suspend fun getAppsStatus(filter: String?) =
-      safeApiCall {api.getAppsStatus(filter)}
+        safeApiCall { api.getAppsStatus(filter) }
 
     override suspend fun getCandidatesStatus(filter: String?) =
-      safeApiCall {api.getCandidatesStatus(filter)}
+        safeApiCall { api.getCandidatesStatus(filter) }
 
     override suspend fun getVacancies(filter: String?) =
-      safeApiCall {api.getVacancies(filter)}
+        safeApiCall { api.getVacancies(filter) }
 
+    override suspend fun postVacancies(
+        data: VacanciesCreate,
+        files: List<UploadFile>
+    ) = safeApiCall { api.postVacancies(data, files) }
 
-    override suspend fun postVacancies(data: VacanciesCreate) =
-      safeApiCall {api.postVacancies(data)}
-
-    override suspend fun getVacancy(id: String) = safeApiCall { api.getVacancy(id)}
+    override suspend fun getVacancy(id: String) =
+        safeApiCall { api.getVacancy(id) }
 
     override suspend fun patchVacancies(
         id: String,
-        data: VacanciesUpdate
-    ) = safeApiCall { api.patchVacancies(id,data)}
+        data: VacanciesUpdate,
+        files: List<UploadFile>
+    ) = safeApiCall { api.patchVacancies(id, data, files) }
 
-    override suspend fun deleteVacancies(id: String) = safeApiCall { api.deleteVacancies(id)}
+    override suspend fun deleteVacancies(id: String) =
+        safeApiCall { api.deleteVacancies(id) }
 
-    override suspend fun getApplicants(filter: String?) = safeApiCall { api.getApplicants(filter)}
+    override suspend fun getApplicants(filter: String?) =
+        safeApiCall { api.getApplicants(filter) }
 
-    override suspend fun postApplicants(data: ApplicantsCreate) = safeApiCall { api.postApplicants(data)}
+    override suspend fun postApplicants(
+        data: ApplicantsCreate,
+        avatar: UploadFile?,
+        resume: UploadFile?
+    ) = safeApiCall { api.postApplicants(data, avatar, resume) }
 
-    override suspend fun getApplicant(id: String) = safeApiCall { api.getApplicant(id)}
+    override suspend fun getApplicant(id: String) =
+        safeApiCall { api.getApplicant(id) }
 
     override suspend fun patchApplicants(
         id: String,
-        data: ApplicantsUpdate
-    ) = safeApiCall { api.patchApplicants(id,data)}
+        data: ApplicantsUpdate,
+        avatar: UploadFile?,
+        resume: UploadFile?
+    ) = safeApiCall { api.patchApplicants(id, data, avatar, resume) }
 
+    override suspend fun getCandidateCards(filter: String?) =
+        safeApiCall { api.getCandidateCards(filter) }
 
-    override suspend fun getCandidateCards(filter: String?) = safeApiCall { api.getCandidateCards(filter)}
+    override suspend fun postCandidateCards(data: CandidateCardsCreate) =
+        safeApiCall { api.postCandidateCards(data) }
 
-    override suspend fun postCandidateCards(data: CandidateCardsCreate) = safeApiCall { api.postCandidateCards(data)}
-
-    override suspend fun getCandidateCard(id: String) = safeApiCall { api.getCandidateCard(id)}
+    override suspend fun getCandidateCard(id: String) =
+        safeApiCall { api.getCandidateCard(id) }
 
     override suspend fun patchCandidateCards(
         id: String,
         data: CandidateCardsUpdate
-    ) = safeApiCall { api.patchCandidateCards(id,data)}
+    ) = safeApiCall { api.patchCandidateCards(id, data) }
 
+    override suspend fun getCandidateCardsCom(filter: String?) =
+        safeApiCall { api.getCandidateCardsCom(filter) }
 
-    override suspend fun getCandidateCardsCom(filter: String?) = safeApiCall { api.getCandidateCardsCom(filter)}
+    override suspend fun postCandidateCardsCom(data: CandidateCardCommentsCreate) =
+        safeApiCall { api.postCandidateCardsCom(data) }
 
-    override suspend fun postCandidateCardsCom(data: CandidateCardCommentsCreate) = safeApiCall { api.postCandidateCardsCom(data)}
-
-    override suspend fun getCandidateCardCom(id: String) = safeApiCall { api.getCandidateCardCom(id)}
+    override suspend fun getCandidateCardCom(id: String) =
+        safeApiCall { api.getCandidateCardCom(id) }
 
     override suspend fun patchCandidateCardsCom(
         id: String,
         data: CandidateCardCommentsUpdate
-    ) = safeApiCall { api.patchCandidateCardsCom(id,data)}
+    ) = safeApiCall { api.patchCandidateCardsCom(id, data) }
 
+    override suspend fun getUsers(filter: String?) =
+        safeApiCall { api.getUsers(filter) }
 
-    override suspend fun getUsers(filter: String?) = safeApiCall { api.getUsers(filter)}
+    override suspend fun postUsers(
+        data: UsersCreate,
+        avatar: UploadFile?
+    ) = safeApiCall { api.postUsers(data, avatar) }
 
-    override suspend fun postUsers(data: UsersCreate) = safeApiCall { api.postUsers(data)}
-
-    override suspend fun getUser(id: String) = safeApiCall { api.getUser(id)}
+    override suspend fun getUser(id: String) =
+        safeApiCall { api.getUser(id) }
 
     override suspend fun patchUsers(
         id: String,
-        data: UsersUpdate
-    ) = safeApiCall { api.patchUsers(id,data)}
+        data: UsersUpdate,
+        avatar: UploadFile?
+    ) = safeApiCall { api.patchUsers(id, data, avatar) }
 
-
-    override suspend fun authPassword(data: AuthWithPasswordRequest) = safeApiCall { api.authPassword(data)}
+    override suspend fun authPassword(data: AuthWithPasswordRequest) =
+        safeApiCall { api.authPassword(data) }
 }

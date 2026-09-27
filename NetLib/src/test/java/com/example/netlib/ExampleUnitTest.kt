@@ -4,6 +4,8 @@ import com.example.netlib.data.remote.PBApi
 import com.example.netlib.data.remote.PBApiService
 import com.example.netlib.data.repository.RepositoryImpl
 import com.example.netlib.domain.model.Department.DepartmentsListResponse
+import com.example.netlib.domain.model.NetworkResult
+import com.example.netlib.domain.model.UploadFile
 import com.example.netlib.domain.model.User.UsersCreate
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
@@ -32,7 +34,7 @@ class ExampleUnitTest {
         Assert.assertNotEquals(10, departments.totalItems)
     }
 
-   
+
 
     @Test
     fun registrationUser() = runBlocking{
@@ -56,4 +58,6 @@ class ExampleUnitTest {
                     )
         )
     }
+
+
 }

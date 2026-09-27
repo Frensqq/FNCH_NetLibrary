@@ -20,6 +20,7 @@ import com.example.netlib.domain.model.Cities.CitiesListResponse
 import com.example.netlib.domain.model.Department.DepartmentsListResponse
 import com.example.netlib.domain.model.NetworkResult
 import com.example.netlib.domain.model.Position.PositionsListResponse
+import com.example.netlib.domain.model.UploadFile
 import com.example.netlib.domain.model.User.UsersCreate
 import com.example.netlib.domain.model.User.UsersListResponse
 import com.example.netlib.domain.model.User.UsersRecord
@@ -31,75 +32,83 @@ import com.example.netlib.domain.model.Vacancies.VacanciesUpdate
 
 interface Repository {
 
-        //department
+        // dictionaries
         suspend fun getDepartments(filter: String?): NetworkResult<DepartmentsListResponse>
-
-        //cities
-
         suspend fun getCities(filter: String?): NetworkResult<CitiesListResponse>
-
-        //applicant_statuses
-
         suspend fun getAppsStatus(filter: String?): NetworkResult<ApplicantsStatusesListResponse>
-
-        //candidate_statuses
         suspend fun getCandidatesStatus(filter: String?): NetworkResult<CandidateStatusesListResponse>
-
-        //position
         suspend fun getPositions(filter: String?): NetworkResult<PositionsListResponse>
 
-        //vacancies
-
+        // vacancies
         suspend fun getVacancies(filter: String?): NetworkResult<VacanciesListResponse>
-        suspend fun postVacancies(data: VacanciesCreate): NetworkResult<VacanciesRecord>
+
+        suspend fun postVacancies(
+                data: VacanciesCreate,
+                files: List<UploadFile> = emptyList()
+        ): NetworkResult<VacanciesRecord>
+
         suspend fun getVacancy(id: String): NetworkResult<VacanciesRecord>
-        suspend fun patchVacancies(id: String, data: VacanciesUpdate): NetworkResult<VacanciesRecord>
-        suspend fun deleteVacancies(id: String) : NetworkResult<Unit>
 
-        //applicants
+        suspend fun patchVacancies(
+                id: String,
+                data: VacanciesUpdate,
+                files: List<UploadFile> = emptyList()
+        ): NetworkResult<VacanciesRecord>
 
+        suspend fun deleteVacancies(id: String): NetworkResult<Unit>
+
+        // applicants
         suspend fun getApplicants(filter: String?): NetworkResult<ApplicantsListResponse>
 
-        suspend fun postApplicants(data: ApplicantsCreate): NetworkResult<ApplicantsRecord>
+        suspend fun postApplicants(
+                data: ApplicantsCreate,
+                avatar: UploadFile? = null,
+                resume: UploadFile? = null
+        ): NetworkResult<ApplicantsRecord>
 
         suspend fun getApplicant(id: String): NetworkResult<ApplicantsRecord>
 
-        suspend fun patchApplicants(id: String, data: ApplicantsUpdate): NetworkResult<ApplicantsRecord>
+        suspend fun patchApplicants(
+                id: String,
+                data: ApplicantsUpdate,
+                avatar: UploadFile? = null,
+                resume: UploadFile? = null
+        ): NetworkResult<ApplicantsRecord>
 
-        //candidate_cards
+        // candidate cards
         suspend fun getCandidateCards(filter: String?): NetworkResult<CandidateCardsListResponse>
-
         suspend fun postCandidateCards(data: CandidateCardsCreate): NetworkResult<CandidateCardsRecord>
-
         suspend fun getCandidateCard(id: String): NetworkResult<CandidateCardsRecord>
-
         suspend fun patchCandidateCards(
-            id: String,
-            data: CandidateCardsUpdate
+                id: String,
+                data: CandidateCardsUpdate
         ): NetworkResult<CandidateCardsRecord>
 
-
-        //candidate_cards
-
+        // candidate card comments
         suspend fun getCandidateCardsCom(filter: String?): NetworkResult<CandidateCardCommentsListResponse>
         suspend fun postCandidateCardsCom(data: CandidateCardCommentsCreate): NetworkResult<CandidateCardCommentsRecord>
-         suspend fun getCandidateCardCom(id: String): NetworkResult<CandidateCardCommentsRecord>
-         suspend fun patchCandidateCardsCom(
-            id: String,
-            data: CandidateCardCommentsUpdate
+        suspend fun getCandidateCardCom(id: String): NetworkResult<CandidateCardCommentsRecord>
+        suspend fun patchCandidateCardsCom(
+                id: String,
+                data: CandidateCardCommentsUpdate
         ): NetworkResult<CandidateCardCommentsRecord>
 
-        //user
-
+        // users
         suspend fun getUsers(filter: String?): NetworkResult<UsersListResponse>
 
-        suspend fun postUsers(data: UsersCreate): NetworkResult<UsersRecord>
+        suspend fun postUsers(
+                data: UsersCreate,
+                avatar: UploadFile? = null
+        ): NetworkResult<UsersRecord>
 
         suspend fun getUser(id: String): NetworkResult<UsersRecord>
 
-        suspend fun patchUsers(id: String, data: UsersUpdate): NetworkResult<UsersRecord>
+        suspend fun patchUsers(
+                id: String,
+                data: UsersUpdate,
+                avatar: UploadFile? = null
+        ): NetworkResult<UsersRecord>
 
-        //auth
-
+        // auth
         suspend fun authPassword(data: AuthWithPasswordRequest): NetworkResult<UserAuthResponse>
 }

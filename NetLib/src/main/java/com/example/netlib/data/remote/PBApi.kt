@@ -19,6 +19,7 @@ import com.example.netlib.domain.model.CandidateStatuses.CandidateStatusesListRe
 import com.example.netlib.domain.model.Cities.CitiesListResponse
 import com.example.netlib.domain.model.Department.DepartmentsListResponse
 import com.example.netlib.domain.model.Position.PositionsListResponse
+import com.example.netlib.domain.model.UploadFile
 import com.example.netlib.domain.model.User.UsersCreate
 import com.example.netlib.domain.model.User.UsersListResponse
 import com.example.netlib.domain.model.User.UsersRecord
@@ -30,17 +31,31 @@ import com.example.netlib.domain.model.Vacancies.VacanciesUpdate
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.encodeToJsonElement
+import kotlinx.serialization.json.jsonObject
 
 class PBApi(
-     val client: HttpClient,
+    private val client: HttpClient,
 ) {
+
+    private val json = Json {
+        encodeDefaults = true
+        explicitNulls = false
+    }
 
     private suspend inline fun <reified T> get(
         path: String,
@@ -65,114 +80,238 @@ class PBApi(
         setBody(data)
     }.body()
 
+    private suspend fun delete(path: String) {
+        client.delete(path)
+    }
 
-    //department
-     suspend fun getDepartments(filter: String?): DepartmentsListResponse =
+    private fun files(
+        vararg values: Pair<String, UploadFile?>
+    ) = values
+        .filter { it.second != null }
+        .associate { it.first to listOf(it.second!!) }
+
+
+    private inline fun <reified D> fields(data: D): Map<String, String> {
+        val objectData = json.encodeToJsonElement(data).jsonObject
+
+        return objectData.mapNotNull { (key, value) ->
+            if (value == JsonNull) {
+                null
+            } else {
+                key to if (value is JsonPrimitive) value.content else value.toString()
+            }
+        }.toMap()
+    }
+
+    private suspend inline fun <reified T, reified D> multipart(
+        path: String,
+        data: D,
+        files: Map<String, List<UploadFile>>,
+        patch: Boolean = false
+    ): T {
+
+        val body = MultiPartFormDataContent(
+            formData {
+                fields(data).forEach { (k, v) -> append(k, v) }
+
+                files.forEach { (field, list) ->
+                    list.forEach { file ->
+                        append(
+                            field,
+                            file.bytes,
+                            Headers.build {
+                                append(
+                                    HttpHeaders.ContentDisposition,
+                                    "filename=\"${file.name}\""
+                                )
+                                append(HttpHeaders.ContentType, file.mimeType)
+                            }
+                        )
+                    }
+                }
+            }
+        )
+
+        return if (patch)
+            client.patch(path) { setBody(body) }.body()
+        else
+            client.post(path) { setBody(body) }.body()
+    }
+
+    // dictionaries
+    suspend fun getDepartments(filter: String?): DepartmentsListResponse =
         get("collections/departments/records", filter)
 
-    //cities
-
-     suspend fun getCities(filter: String?): CitiesListResponse =
+    suspend fun getCities(filter: String?): CitiesListResponse =
         get("collections/cities/records", filter)
 
-
-    //applicant_statuses
     suspend fun getAppsStatus(filter: String?): ApplicantsStatusesListResponse =
         get("collections/applicant_statuses/records", filter)
 
-    //candidate_statuses
-     suspend fun getCandidatesStatus(filter: String?): CandidateStatusesListResponse =
+    suspend fun getCandidatesStatus(filter: String?): CandidateStatusesListResponse =
         get("collections/candidate_statuses/records", filter)
 
-
-    //position
     suspend fun getPositions(filter: String?): PositionsListResponse =
         get("collections/positions/records", filter)
 
-
-    //vacancies
-
-     suspend fun getVacancies(filter: String?): VacanciesListResponse =
+    // vacancies
+    suspend fun getVacancies(filter: String?): VacanciesListResponse =
         get("collections/vacancies/records", filter)
 
-     suspend fun postVacancies(data: VacanciesCreate): VacanciesRecord =
-        post("collections/vacancies/records", data)
+    suspend fun postVacancies(
+        data: VacanciesCreate,
+        files: List<UploadFile> = emptyList()
+    ): VacanciesRecord =
+        if (files.isEmpty())
+            post("collections/vacancies/records", data)
+        else
+            multipart(
+                "collections/vacancies/records",
+                data,
+                mapOf("files" to files)
+            )
 
-     suspend fun getVacancy(id: String): VacanciesRecord =
+    suspend fun getVacancy(id: String): VacanciesRecord =
         get("collections/vacancies/records/$id")
 
-     suspend fun patchVacancies(id: String, data: VacanciesUpdate): VacanciesRecord =
-        patch("collections/vacancies/records/$id", data)
+    suspend fun patchVacancies(
+        id: String,
+        data: VacanciesUpdate,
+        files: List<UploadFile> = emptyList()
+    ): VacanciesRecord =
+        if (files.isEmpty())
+            patch("collections/vacancies/records/$id", data)
+        else
+            multipart(
+                "collections/vacancies/records/$id",
+                data,
+                mapOf("files+" to files),
+                patch = true
+            )
 
-     suspend fun deleteVacancies(id: String) {
-        client.delete("collections/vacancies/records/$id")
+    suspend fun deleteVacancies(id: String) {
+        delete("collections/vacancies/records/$id")
     }
 
-    //applicants
-
-     suspend fun getApplicants(filter: String?): ApplicantsListResponse =
+    // applicants
+    suspend fun getApplicants(filter: String?): ApplicantsListResponse =
         get("collections/applicants/records", filter)
 
-     suspend fun postApplicants(data: ApplicantsCreate): ApplicantsRecord =
-        post("collections/applicants/records", data)
+    suspend fun postApplicants(
+        data: ApplicantsCreate,
+        avatar: UploadFile? = null,
+        resume: UploadFile? = null
+    ): ApplicantsRecord {
 
-     suspend fun getApplicant(id: String): ApplicantsRecord =
+        if (avatar == null && resume == null)
+            return post("collections/applicants/records", data)
+
+        return multipart(
+            "collections/applicants/records",
+            data,
+            files(
+                "avatar" to avatar,
+                "resume" to resume
+            )
+        )
+    }
+
+    suspend fun getApplicant(id: String): ApplicantsRecord =
         get("collections/applicants/records/$id")
 
-     suspend fun patchApplicants(id: String, data: ApplicantsUpdate): ApplicantsRecord =
-        patch("collections/applicants/records/$id", data)
+    suspend fun patchApplicants(
+        id: String,
+        data: ApplicantsUpdate,
+        avatar: UploadFile? = null,
+        resume: UploadFile? = null
+    ): ApplicantsRecord {
 
+        if (avatar == null && resume == null)
+            return patch("collections/applicants/records/$id", data)
 
-    //candidate_cards
+        return multipart(
+            "collections/applicants/records/$id",
+            data,
+            files(
+                "avatar" to avatar,
+                "resume" to resume
+            ),
+            patch = true
+        )
+    }
 
-     suspend fun getCandidateCards(filter: String?): CandidateCardsListResponse =
+    // candidate cards
+    suspend fun getCandidateCards(filter: String?): CandidateCardsListResponse =
         get("collections/candidate_cards/records", filter)
 
-     suspend fun postCandidateCards(data: CandidateCardsCreate): CandidateCardsRecord =
+    suspend fun postCandidateCards(data: CandidateCardsCreate): CandidateCardsRecord =
         post("collections/candidate_cards/records", data)
 
-     suspend fun getCandidateCard(id: String): CandidateCardsRecord =
+    suspend fun getCandidateCard(id: String): CandidateCardsRecord =
         get("collections/candidate_cards/records/$id")
 
-     suspend fun patchCandidateCards(
+    suspend fun patchCandidateCards(
         id: String,
         data: CandidateCardsUpdate
     ): CandidateCardsRecord =
         patch("collections/candidate_cards/records/$id", data)
 
-
-    //candidate_cards
-
-     suspend fun getCandidateCardsCom(filter: String?): CandidateCardCommentsListResponse =
+    // candidate card comments
+    suspend fun getCandidateCardsCom(filter: String?): CandidateCardCommentsListResponse =
         get("collections/candidate_card_comments/records", filter)
 
-     suspend fun postCandidateCardsCom(data: CandidateCardCommentsCreate): CandidateCardCommentsRecord =
+    suspend fun postCandidateCardsCom(data: CandidateCardCommentsCreate): CandidateCardCommentsRecord =
         post("collections/candidate_card_comments/records", data)
 
-     suspend fun getCandidateCardCom(id: String): CandidateCardCommentsRecord =
+    suspend fun getCandidateCardCom(id: String): CandidateCardCommentsRecord =
         get("collections/candidate_card_comments/records/$id")
 
-     suspend fun patchCandidateCardsCom(
+    suspend fun patchCandidateCardsCom(
         id: String,
         data: CandidateCardCommentsUpdate
     ): CandidateCardCommentsRecord =
         patch("collections/candidate_card_comments/records/$id", data)
 
-    //user
-
-     suspend fun getUsers(filter: String?): UsersListResponse =
+    // users
+    suspend fun getUsers(filter: String?): UsersListResponse =
         get("collections/users/records", filter)
 
-     suspend fun postUsers(data: UsersCreate): UsersRecord =
-        post("collections/users/records", data)
+    suspend fun postUsers(
+        data: UsersCreate,
+        avatar: UploadFile? = null
+    ): UsersRecord {
+        if (avatar == null) {
+            return post("collections/users/records", data)
+        }
 
-     suspend fun getUser(id: String): UsersRecord =
+        return multipart(
+            path = "collections/users/records",
+            data = data,
+            files = mapOf("avatar" to listOf(avatar))
+        )
+    }
+
+    suspend fun getUser(id: String): UsersRecord =
         get("collections/users/records/$id")
 
-     suspend fun patchUsers(id: String, data: UsersUpdate): UsersRecord =
-        patch("collections/users/records/$id", data)
+    suspend fun patchUsers(
+        id: String,
+        data: UsersUpdate,
+        avatar: UploadFile? = null
+    ): UsersRecord {
+        if (avatar == null) {
+            return patch("collections/users/records/$id", data)
+        }
 
-    //auth
-     suspend fun authPassword(data: AuthWithPasswordRequest): UserAuthResponse =
+        return multipart(
+            path = "collections/users/records/$id",
+            data = data,
+            files = mapOf("avatar" to listOf(avatar)),
+            patch = true
+        )
+    }
+
+    // auth
+    suspend fun authPassword(data: AuthWithPasswordRequest): UserAuthResponse =
         post("collections/users/auth-with-password", data)
 }

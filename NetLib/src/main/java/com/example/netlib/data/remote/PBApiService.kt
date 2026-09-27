@@ -21,12 +21,12 @@ object PBApiService {
 
     val instance: PBApi by lazy {
         PBApi(
-            client = HttpClient(OkHttp){
+            client = HttpClient(OkHttp) {
                 expectSuccess = true
 
-                install(ContentNegotiation){
+                install(ContentNegotiation) {
                     json(
-                        Json{
+                        Json {
                             ignoreUnknownKeys = true
                             isLenient = true
                             encodeDefaults = true
@@ -34,21 +34,18 @@ object PBApiService {
                     )
                 }
 
-                install(Logging){
+                install(Logging) {
                     level = LogLevel.ALL
                 }
 
                 defaultRequest {
                     url(BASE_URL)
-                    contentType(ContentType.Application.Json)
 
                     token?.let {
                         header("Authorization", it)
                     }
                 }
-
             }
         )
     }
-
 }

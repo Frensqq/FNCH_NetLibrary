@@ -18,5 +18,5 @@ data class UsersUpdate(
     val role: String,
     val oldPassword: String,
     val password: String,
-    val confirmPassword: String
+    val passwordConfirm: String
 )

@@ -12,8 +12,8 @@ data class CandidateCardsRecord(
     val applicant: String,
     val status: String,
     val hrResponsible: String,
-    val sort: String,
-    val isDeleted: String,
+    val sort: Int,
+    val isDeleted: Boolean,
     val created: String,
     val updated: String,
 )

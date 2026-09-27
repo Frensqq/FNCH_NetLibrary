@@ -20,7 +20,7 @@ data class VacanciesRecord(
     val salaryFrom: Int,
     val salaryTo: Int,
     val author: String,
-    val files: String,
+    val files: List<String>,
     val created: String,
     val updated: String,
 )
