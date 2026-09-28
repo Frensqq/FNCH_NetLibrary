@@ -131,7 +131,6 @@ class PBApi(
                 }
             }
         )
-
         return if (patch)
             client.patch(path) { setBody(body) }.body()
         else

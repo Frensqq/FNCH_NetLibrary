@@ -528,10 +528,8 @@ class PBApiIntegrationTest {
         email: String,
         password: String
     ) = UsersUpdate(
-        id = id,
         email = email,
-        emailVisibility = "true",
-        verified = "false",
+        emailVisibility = true,
         firstName = "Updated",
         lastName = "User",
         patronymic = "",
@@ -539,9 +537,6 @@ class PBApiIntegrationTest {
         department = "",
         position = "",
         role = "hr",
-        oldPassword = password,
-        password = password,
-        passwordConfirm = password
     )
 
     private fun textFile(
